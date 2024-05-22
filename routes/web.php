@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\PemasokController;
+use App\Http\Controllers\PenjualanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +27,7 @@ Route::get('/home', function () {
 Route::get('/admin', function () {
     return view('layouts.master');
 });
+
+Route::resource('barang', BarangController::class);
+Route::resource('penjualan', PenjualanController::class);
+Route::resource('pemasok', PemasokController::class);
