@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\Penjualan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PenjualanController extends Controller
@@ -12,7 +14,10 @@ class PenjualanController extends Controller
      */
     public function index()
     {
-        //
+        $penjualan = Penjualan::latest()->paginate(5);
+
+        return view('wikrapay.penjualan.index', compact('penjualan'))
+        ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -20,7 +25,8 @@ class PenjualanController extends Controller
      */
     public function create()
     {
-        //
+        $barang = Barang::all();
+        return view('wikrapay.penjualan.create', compact('barang'));
     }
 
     /**
@@ -28,7 +34,22 @@ class PenjualanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'barang_id' => 'required',
+            'jumlah' => 'required',
+            'total' => 'required',
+        ]);
+
+        $tgl = Carbon::now();
+
+        $penjualan = new Penjualan();
+        $penjualan->barang_id = $request->input('barang_id');
+        $penjualan->jumlah = $request->input('jumlah');  // Perbaikan untuk menyimpan jumlah dari request
+        $penjualan->total = $request->input('total');    // Perbaikan untuk menyimpan total dari request
+        $penjualan->tgl = $tgl;
+        $penjualan->save();
+
+        return redirect()->route('penjualan.index')->with('success', 'Penjualan berhasil disimpan.');
     }
 
     /**

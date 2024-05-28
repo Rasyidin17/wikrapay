@@ -14,4 +14,10 @@ class Barang extends Model
         'nama_barang',
         'harga',
     ];
+
+    public function pemasok()
+    {
+        return $this->belongsTo(Pemasok::class, 'pemasok_id', 'id');
+    }
 }
+
