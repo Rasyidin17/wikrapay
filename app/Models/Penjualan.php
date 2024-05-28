@@ -8,10 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Penjualan extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'barang_id',
         'jumlah',
         'total',
         'tgl',
     ];
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class, 'barang_id', 'id');
+    }
 }

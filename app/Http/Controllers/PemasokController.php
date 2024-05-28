@@ -12,7 +12,9 @@ class PemasokController extends Controller
      */
     public function index()
     {
-        //
+        $pemasok = Pemasok::latest()->paginate(5);
+        return view('wikrapay.pemasok.index', compact('pemasok'))
+        ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -20,7 +22,7 @@ class PemasokController extends Controller
      */
     public function create()
     {
-        //
+        return view('wikrapay.pemasok.create');
     }
 
     /**
@@ -28,7 +30,15 @@ class PemasokController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_pemasok' => 'required',
+            'no_tlp' => 'required',
+            'jenis' => 'required',
+        ]);
+
+        Pemasok::create($request->all());
+
+        return redirect()->route('pemasok.index')->with('success', 'Pemasok berhasil ditambahkan');
     }
 
     /**
@@ -36,7 +46,7 @@ class PemasokController extends Controller
      */
     public function show(Pemasok $pemasok)
     {
-        //
+        return view('wikrapay.pemasok.show', compact('pemasok'));
     }
 
     /**
@@ -44,7 +54,7 @@ class PemasokController extends Controller
      */
     public function edit(Pemasok $pemasok)
     {
-        //
+        return view('wikrapay.pemasok.edit');
     }
 
     /**
@@ -52,7 +62,15 @@ class PemasokController extends Controller
      */
     public function update(Request $request, Pemasok $pemasok)
     {
-        //
+        $request->validate([
+            'nama_pemasok' => 'required',
+            'no_tlp' => 'required',
+            'jenis' => 'required',
+        ]);
+
+        $pemasok->update($request->all());
+
+        return redirect()->route('pemasok.index')->with('success', 'Pemasok berhasil diedit');
     }
 
     /**
@@ -60,6 +78,8 @@ class PemasokController extends Controller
      */
     public function destroy(Pemasok $pemasok)
     {
-        //
+        $pemasok->delete();
+
+        return redirect()->route('pemasok.index')->with('success', 'Pemasok Berhasil di hapus');
     }
 }
